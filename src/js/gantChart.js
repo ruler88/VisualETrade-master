@@ -1,5 +1,7 @@
+
 var tasks = [
 {"startDate":new Date("Sun Dec 09 01:36:45 EST 2012"),"endDate":new Date("Sun Dec 09 02:36:45 EST 2012"),"taskName":"E Job","status":"RUNNING"}];
+
 
 var taskStatus = {
     "SUCCEEDED" : "bar",
@@ -7,6 +9,18 @@ var taskStatus = {
     "RUNNING" : "bar-running",
     "KILLED" : "bar-killed"
 };
+
+
+
+console.log("test");
+$(document).ready(function() {
+
+$.getJSON('../../json/datesEquity.json', function(data) {
+        var output=data;
+  });
+});
+
+//console.log(output);
 
 var taskNames = [ "D Job", "P Job", "E Job", "A Job", "N Job" ];
 
