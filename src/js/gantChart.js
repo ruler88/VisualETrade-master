@@ -12,19 +12,22 @@ var taskStatus = {
 
 $(document).ready(function() {
 $.getJSON('/mnt/tradingData/datesEquity.json', function(jsonData) {
-        
+        //load json
         console.log(jsonData.dates);
 
         var availableDates = jsonData.dates;
 
-
-
+        for (var i = 0; i < availableDates.length; i++) {
+            //add all the date buttons
+            $('<button type="button" class="btn btn-primary" data-toggle="button">' + availableDates[i] + '</button>')
+            .appendTo('table');
+        }
 
   });
 });
 
 
-//console.log(output);
+
 
 var taskNames = [ "D Job", "P Job", "E Job", "A Job", "N Job", "FU" ];
 
@@ -38,9 +41,9 @@ tasks.sort(function(a, b) {
 var minDate = tasks[0].startDate;
 
 var format = "%H:%M";
-var timeDomainString = "1day";
+var timeDomainString = "1week";
 
-var gantt = d3.gantt().taskTypes(taskNames).taskStatus(taskStatus).tickFormat(format).height(450).width(800);
+var gantt = d3.gantt().taskTypes(taskNames).taskStatus(taskStatus).tickFormat(format).height(450).width(1000);
 
 
 gantt.timeDomainMode("fixed");
@@ -77,7 +80,7 @@ function changeTimeDomain(timeDomainString) {
 
     case "1week":
 	format = "%m-%d-%y %H";
-	gantt.timeDomain([ d3.time.day.offset(getEndDate(), -7), getEndDate() ]);
+	gantt.timeDomain([ minDate, getEndDate() ]);
 	break;
     default:
 	format = "%H:%M"

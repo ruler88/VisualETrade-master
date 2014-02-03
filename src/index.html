@@ -2,20 +2,39 @@
 <html>
 <head>
 <title>Gantt Chart Equity Dates</title>
+
+
+
+
+
+
 <link type="text/css" href="styles/mbostock_style.css" rel="stylesheet" />
 <link type="text/css" href="styles/DateEq.css" rel="stylesheet" />
+<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap-theme.min.css">
+
+
+
 </head>
 <body>
-	<button type="button" onclick="addTask()">Add Task</button>
-	<button type="button" onclick="newTask('newtask!')">Remove Task</button>
-	<button type="button" onclick="changeTimeDomain('1hr')">1 HR</button>
-	<button type="button" onclick="changeTimeDomain('3hr')">3 HR</button>
-	<button type="button" onclick="changeTimeDomain('6hr')">6 HR</button>
-    <button type="button" onclick="changeTimeDomain('1day')">1 DAY</button>
-    <button type="button" onclick="changeTimeDomain('1week')">1 WEEK</button>
+	<button type="button" class="mbostock_button" onclick="addTask()">Add Task</button>
+	<button type="button" class="mbostock_button" onclick="newTask('newtask!')">Remove Task</button>
+	<button type="button" class="mbostock_button" onclick="changeTimeDomain('1hr')">1 HR</button>
+	<button type="button" class="mbostock_button" onclick="changeTimeDomain('3hr')">3 HR</button>
+	<button type="button" class="mbostock_button" onclick="changeTimeDomain('6hr')">6 HR</button>
+    <button type="button" class="mbostock_button" onclick="changeTimeDomain('1day')">1 DAY</button>
+    <button type="button" class="mbostock_button" onclick="changeTimeDomain('1week')">1 WEEK</button>
+
+    <button type="button" class="btn btn-primary" data-toggle="button">Single toggle</button>
+    
+    <table>
+    </table>
+
 </body>
 </html>
-	<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-    <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
-	<script type="text/javascript" src="js/gantChartD3.js"></script>
-	<script type="text/javascript" src="js/gantChart.js"></script>
+
+<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+<script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+<script type="text/javascript" src="js/gantChartD3.js"></script>
+<script type="text/javascript" src="js/gantChart.js"></script>

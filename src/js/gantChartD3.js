@@ -15,10 +15,10 @@ d3.gantt = function() {
     var timeDomainMode = FIT_TIME_DOMAIN_MODE;// fixed or fit
     var taskTypes = [];
     var taskStatus = [];
-    var height = document.body.clientHeight - margin.top - margin.bottom-5;
-    var width = document.body.clientWidth - margin.right - margin.left-5;
+    var height = 1000;
+    var width = 1000;
 
-    var tickFormat = "%D";
+    var tickFormat = "%m-%d-%y %H";
 
     var keyFunction = function(d) {
 	return d.startDate + d.taskName + d.endDate;
@@ -65,14 +65,13 @@ d3.gantt = function() {
     };
     
     function gantt(tasks) {
-	
 	initTimeDomain();
 	initAxis();
 	
 	var svg = d3.select("body")
 	.append("svg")
 	.attr("class", "chart")
-	.attr("width", width + margin.left + margin.right)
+	.attr("width", width + margin.left + margin.right )
 	.attr("height", height + margin.top + margin.bottom)
 	.append("g")
         .attr("class", "gantt-chart")
