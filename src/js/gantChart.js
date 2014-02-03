@@ -10,19 +10,23 @@ var taskStatus = {
     "KILLED" : "bar-killed"
 };
 
-
-
-console.log("test");
 $(document).ready(function() {
+$.getJSON('/mnt/tradingData/datesEquity.json', function(jsonData) {
+        
+        console.log(jsonData.dates);
 
-$.getJSON('../../json/datesEquity.json', function(data) {
-        var output=data;
+        var availableDates = jsonData.dates;
+
+
+
+
   });
 });
 
+
 //console.log(output);
 
-var taskNames = [ "D Job", "P Job", "E Job", "A Job", "N Job" ];
+var taskNames = [ "D Job", "P Job", "E Job", "A Job", "N Job", "FU" ];
 
 tasks.sort(function(a, b) {
     return a.endDate - b.endDate;
@@ -43,6 +47,11 @@ gantt.timeDomainMode("fixed");
 changeTimeDomain(timeDomainString);
 
 gantt(tasks);
+
+function newTask(newTask) {
+    taskNames.push(newTask+Math.random())
+    console.log(taskNames)
+}
 
 function changeTimeDomain(timeDomainString) {
     this.timeDomainString = timeDomainString;
@@ -67,7 +76,7 @@ function changeTimeDomain(timeDomainString) {
 	break;
 
     case "1week":
-	format = "%a %H:%M";
+	format = "%m-%d-%y %H";
 	gantt.timeDomain([ d3.time.day.offset(getEndDate(), -7), getEndDate() ]);
 	break;
     default:
@@ -96,7 +105,7 @@ function addTask() {
 
     tasks.push({
 	"startDate" : d3.time.hour.offset(lastEndDate, Math.ceil(1 * Math.random())),
-	"endDate" : d3.time.hour.offset(lastEndDate, (Math.ceil(Math.random() * 3)) + 1),
+	"endDate" : d3.time.hour.offset(lastEndDate, 20),
 	"taskName" : taskName,
 	"status" : taskStatusName
     });

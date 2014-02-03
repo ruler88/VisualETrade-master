@@ -11,14 +11,14 @@ d3.gantt = function() {
 	left : 150
     };
     var timeDomainStart = d3.time.day.offset(new Date(),-3);
-    var timeDomainEnd = d3.time.hour.offset(new Date(),+3);
+    var timeDomainEnd = d3.time.day.offset(new Date(),+3);
     var timeDomainMode = FIT_TIME_DOMAIN_MODE;// fixed or fit
     var taskTypes = [];
     var taskStatus = [];
     var height = document.body.clientHeight - margin.top - margin.bottom-5;
     var width = document.body.clientWidth - margin.right - margin.left-5;
 
-    var tickFormat = "%H:%M";
+    var tickFormat = "%D";
 
     var keyFunction = function(d) {
 	return d.startDate + d.taskName + d.endDate;
@@ -41,7 +41,7 @@ d3.gantt = function() {
 	if (timeDomainMode === FIT_TIME_DOMAIN_MODE) {
 	    if (tasks === undefined || tasks.length < 1) {
 		timeDomainStart = d3.time.day.offset(new Date(), -3);
-		timeDomainEnd = d3.time.hour.offset(new Date(), +3);
+		timeDomainEnd = d3.time.day.offset(new Date(), +3);
 		return;
 	    }
 	    tasks.sort(function(a, b) {
