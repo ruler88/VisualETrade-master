@@ -1,7 +1,7 @@
 
 
 var tasks = [
-{"startDate":new Date("Sun Dec 09 01:36:45 EST 2012"),"endDate":new Date("Sun Dec 09 02:36:45 EST 2012"),"taskName":"E Job","status":"RUNNING"}];
+{"startDate":new Date("Sun Dec 09 01:36:45 EST 2013"),"endDate":new Date("Sun Dec 10 02:36:45 EST 2013"),"taskName":"E Job","status":"RUNNING"}];
 
 
 var taskStatus = {
@@ -70,33 +70,6 @@ function changeTimeDomain(timeDomainString) {
     }
     gantt.tickFormat(format);
     gantt.redraw(tasks);
-}
-
-
-var firstDate;
-var lastDate;
-var dates = [];
-//CODE HERE
-function addDate(date) {
-    var startDate = date;
-    dates.push({
-        "startDate" : startDate,
-        "endDate" : d3.time.day.offset(startDate, 1),
-        "taskName" : "nom",
-        "status" : "SUCCEEDED"
-    });
-
-    changeTimeDomain(timeDomainString);
-    gantt.redraw(dates);
-}
-
-function getEndDate() {
-    var lastEndDate = Date.now();
-    if (tasks.length > 0) {
-    lastEndDate = tasks[tasks.length - 1].endDate;
-    }
-
-    return lastEndDate;
 }
 
 function addTask() {

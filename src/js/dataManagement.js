@@ -1,4 +1,5 @@
 var dateMap = {};       //all dates placed in map, in {date, true} format
+var dateEq = [];
 
 var extractMonth = function(dateString) {
     var month = dateString.substring(4,6);
@@ -15,8 +16,12 @@ var extractYear = function(dateString) {
     return parseInt(year);
 }
 
+var stringToDate = function(dateString) {
+    return new Date(extractYear(dateString), extractMonth(dateString), extractDay(dateString));
+}
 
 var generateTableHtml = function(availableDates) {
+    //generate the HTML code for date table
     var tableHtml = new Array();
     var tmpTableRow = "<tr>" //use this tmp var to keep entire row (month) of dates
     var month = extractMonth(availableDates[0]);
@@ -43,6 +48,7 @@ var startDate = new Date();
 var endDate = new Date(0);
 
 var addStartEndDates = function(date) {
+    //change start/end dates when there is a date addition
     if( startDate > date ) {
         startDate = date;
     }
@@ -52,40 +58,51 @@ var addStartEndDates = function(date) {
 }
 
 var removeStartEndDates = function(date) {
+    //change start/end dates when there is a date removal
     if( startDate.getTime() == date.getTime() ) {
-        console.log("in");
         for( var key in dateMap ) {
             if( dateMap[key] ) {
-                startDate = key;
+                startDate = new Date(String(key));
                 return;
             }
         }
     }
-    if( endDate == date ) {
-
+    if( endDate.getTime() == d3.time.day.offset(date, 1).getTime() ) {
+        var tmpDateKeeper;
+        for( var key in dateMap ) {
+            if( dateMap[key] ) {
+                tmpDateKeeper = new Date(String(key));
+            }
+        }
+        endDate = d3.time.day.offset( tmpDateKeeper, 1 );
     }
-
-    
 }
 
 var toggleDate = function(date) {
+    //adding or removing a date on the chart
     var dateString = String(date);
-    var trueDate = new Date(extractYear(dateString), extractMonth(dateString), extractDay(dateString));
+    var trueDate = stringToDate(dateString);
     if(dateMap[trueDate]) {
+        //remove date
         delete dateMap[trueDate];
         removeStartEndDates(trueDate);
-        console.log(startDate);
+        removeDate(trueDate, dateEq[date]);
     } else {
+        //add date
         dateMap[trueDate] = true;
         addStartEndDates(trueDate);
-        addDate(trueDate);
-        console.log(startDate);
+        addDate(trueDate, dateEq[date]);
     }
 }
 
 
 $(document).ready(function() {
 $.getJSON('/mnt/tradingData/datesEquity.json', function(jsonData) {
+        for(var i=0; i<jsonData.dates.length; i++) {
+            var tmpDate = jsonData.dates[i];
+            dateEq[tmpDate] = jsonData[tmpDate];
+        }
+
         //load json
         var tableRows = generateTableHtml(jsonData.dates);
 
