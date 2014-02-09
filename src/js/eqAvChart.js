@@ -1,12 +1,10 @@
 var firstDate;
 var lastDate;
-var dates = [
-{"startDate":new Date("Sun Dec 09 01:36:45 EST 2013"),
-"endDate":new Date("Sun Dec 11 02:36:45 EST 2013"),
-"taskName":"E Job","status":"RUNNING"}];
+var dates = [];         //dates with all equity of that date
 
-var eqNames = [];
-var eqCount = {};
+var eqNames = [];       //live equity names
+var eqCount = {};       //equity name with count
+var filters = ["GOOG"];       //only show equities with these names
 
 var format = "%m-%d";
 
@@ -18,7 +16,11 @@ var taskStatus = {  //replace with eq underlier
 };
 
 
-var gantt = d3.gantt().taskTypes(eqNames).taskStatus(taskStatus).tickFormat(format).height(450).width(1000);
+var gantt = d3.gantt()
+.taskTypes(eqNames)
+.taskStatus(taskStatus)
+.tickFormat(format)
+.height(600).width(1200);
 
 gantt.timeDomainMode("fixed");
 gantt.tickFormat(format);
@@ -60,6 +62,29 @@ function removeAllEq(rmEq) {
     updateEqNames();    
 }
 
+function filter(dates) {
+    if( filters.length == 0 ) {
+        return dates;
+    }
+
+    for(var j=filters.length; j>=0; j--) {
+        if( eqNames[j].indexOf(filters[j]) == -1 ) {
+            eqNames.splice(j, 1);
+        }
+    }
+
+    var filteredDates = [];
+    for(var i=dates.length-1; i>=0; i--) {
+        for(var j=0; j<filters.length; j++) {
+            if( String(dates[i].taskName).indexOf(filters[j]) != -1 ) {
+                filteredDates.push(dates[i]);
+                break;
+            }
+        }
+    }
+    return filteredDates;
+}
+
 function addDate(date, dateEqList) {
     addAllEq(dateEqList);
     var localStartDate = date;
@@ -72,17 +97,22 @@ function addDate(date, dateEqList) {
             "status" : "SUCCEEDED"
         });
     }
+
     gantt.timeDomain( [startDate, endDate] );
-    gantt.redraw(dates);
+    gantt.redraw( filter(dates) );
 }
 
 function removeDate(date, dateEqList) {
-    removeAllEq(dateEqList);
-
+    eqNames.splice(0,1);
     var localStartDate = date;
-    for(var i=0; i<dates.length; i++) {
-        console.log(dates[i]);
+    for(var i=dates.length-1; i>=0; i--) {
+        if( dates[i].startDate.getTime() == date.getTime() ) {
+            dates.splice(i, 1);
+        }
     }
+
+    gantt.timeDomain( [startDate, endDate] );
+    gantt.redraw( filter(dates) );
 }
 
 function getEndDate() {

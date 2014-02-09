@@ -74,12 +74,12 @@ d3.gantt = function() {
 	.attr("width", width + margin.left + margin.right )
 	.attr("height", height + margin.top + margin.bottom)
 	.append("g")
-        .attr("class", "gantt-chart")
+    .attr("class", "gantt-chart")
 	.attr("width", width + margin.left + margin.right)
 	.attr("height", height + margin.top + margin.bottom)
 	.attr("transform", "translate(" + margin.left + ", " + margin.top + ")");
 	
-      svg.selectAll(".chart")
+    svg.selectAll(".chart")
 	 .data(tasks, keyFunction).enter()
 	 .append("rect")
 	 .attr("rx", 5)
@@ -112,10 +112,8 @@ d3.gantt = function() {
 
 	initTimeDomain();
 	initAxis();
-	
-        var svg = d3.select("svg");
 
-        var ganttChartGroup = svg.select(".gantt-chart");
+        var svg = d3.select("svg");
         var rect = ganttChartGroup.selectAll("rect").data(tasks, keyFunction);
         
         rect.enter()
