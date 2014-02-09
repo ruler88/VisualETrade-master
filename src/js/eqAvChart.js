@@ -4,7 +4,7 @@ var dates = [];         //dates with all equity of that date
 
 var eqNames = [];       //live equity names
 var eqCount = {};       //equity name with count
-var filters = ["GOOG"];       //only show equities with these names
+var filters = [];       //only show equities with these names
 
 var format = "%m-%d";
 
@@ -20,13 +20,15 @@ var gantt = d3.gantt()
 .taskTypes(eqNames)
 .taskStatus(taskStatus)
 .tickFormat(format)
-.height(600).width(1200);
+.height(550).width(1200);
 
 gantt.timeDomainMode("fixed");
 gantt.tickFormat(format);
 
 gantt(dates);
 gantt.redraw(dates);
+
+
 
 function updateEqNames() {
     for(var name in eqCount) {
@@ -67,9 +69,13 @@ function filter(dates) {
         return dates;
     }
 
-    for(var j=filters.length; j>=0; j--) {
-        if( eqNames[j].indexOf(filters[j]) == -1 ) {
-            eqNames.splice(j, 1);
+    //filtering list of equity names
+    for(var i=eqNames.length; i>=0; i--) {
+        for(var j=0; j<filters.length; j++) {
+            if( String(eqNames[i]).indexOf(filters[j]) == -1 ) {
+                eqNames.splice(i, 1);
+                break;
+            }
         }
     }
 
@@ -115,12 +121,10 @@ function removeDate(date, dateEqList) {
     gantt.redraw( filter(dates) );
 }
 
-function getEndDate() {
-    var lastEndDate = Date.now();
-    if (tasks.length > 0) {
-    lastEndDate = tasks[tasks.length - 1].endDate;
-    }
-
-    return lastEndDate;
+function addFilter(form) {
+    var filterText = form.filterText.value;
+    form.filterText.value = "";
+    filters.push( filterText );
+    $('#filterTable').append("<tr><td>"+filterText+"</td></tr>");
+    gantt.redraw( filter(dates) );
 }
-

@@ -14,11 +14,18 @@
 
 </head>
 <body>
-	<button type="button" class="mbostock_button" onclick="addTask()">Add Task</button>
-	<button type="button" class="mbostock_button" onclick="newTask('newtask!')">Remove Task</button>
-    
     <table id="dateTable">
     </table>
+    <div>
+    </div>
+
+    <form id="filterForm">
+		Text Filter: <input type="text" name="filterText">
+		<input type="button" onclick="addFilter(this.form)" value="Submit form">
+	</form>
+	<table id="filterTable">
+	</table>
+    <br><br><br><br>
 
 </body>
 </html>
