@@ -31,6 +31,7 @@ gantt.redraw(dates);
 
 
 function updateEqNames() {
+    eqNames.length = 0;
     for(var name in eqCount) {
         eqNames.push(name);
     }
@@ -110,6 +111,7 @@ function addDate(date, dateEqList) {
 
 function removeDate(date, dateEqList) {
     eqNames.splice(0,1);
+    removeAllEq(dateEqList);
     var localStartDate = date;
     for(var i=dates.length-1; i>=0; i--) {
         if( dates[i].startDate.getTime() == date.getTime() ) {
