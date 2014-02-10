@@ -92,16 +92,28 @@ function filter(dates) {
     return filteredDates;
 }
 
+function getStatus(date, dateEq) {
+    //get expiring option
+    date = d3.time.day.offset(date, 1);
+    var optionDateFormat = date.getFullYear()+":"+(date.getMonth()+1)+":"+date.getDate();
+    
+    if( dateEq.indexOf(optionDateFormat) != -1 ) {
+        return "FAILED"
+    }
+    return "SUCCEEDED";
+}
+
 function addDate(date, dateEqList) {
     addAllEq(dateEqList);
     var localStartDate = date;
 
     for(var i=0; i<dateEqList.length; i++) {
+        var eqStatus = getStatus(localStartDate, String(dateEqList[i]));
         dates.push({
             "startDate" : localStartDate,
             "endDate" : d3.time.day.offset(localStartDate, 1),
             "taskName" : String(dateEqList[i]),
-            "status" : "SUCCEEDED"
+            "status" : eqStatus
         });
     }
 
