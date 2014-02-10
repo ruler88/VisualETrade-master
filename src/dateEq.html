@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Gantt Chart Equity Dates</title>
+
+
+
+<link type="text/css" href="styles/mbostock_style.css" rel="stylesheet" />
+<link type="text/css" href="styles/DateEq.css" rel="stylesheet" />
+<link type="text/css" href="styles/bootstrap.css" rel="stylesheet">
+<link type="text/css" href="styles/bootstrap-theme.min.css" rel="stylesheet">
+
+
+
+</head>
+<body>
+    <table id="dateTable">
+    </table>
+    <div>
+    </div>
+
+    <form id="filterForm">
+		Text Filter: <input type="text" name="filterText">
+		<input type="button" onclick="addFilter(this.form)" value="Submit form">
+	</form>
+	<table id="filterTable">
+	</table>
+    <br><br><br><br>
+
+</body>
+</html>
+
+<script type="text/javascript" src="js/jquery-1.10.1.min.js"></script>
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+<script type="text/javascript" src="js/dataManagement.js"></script>
+<script type="text/javascript" src="js/gantChartD3.js"></script>
+<script type="text/javascript" src="js/eqAvChart.js"></script>
