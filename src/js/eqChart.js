@@ -34,7 +34,6 @@ var testdata = [
 */
 
 
-
 nv.addGraph(function() {
     var chart = nv.models.linePlusBarWithFocusChart()
         .margin({top: 30, right: 60, bottom: 50, left: 70})
