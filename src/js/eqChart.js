@@ -1,29 +1,62 @@
-$(document).ready(function() {
-$.getJSON('/mnt/eqJson/2014/02/11/RIO', function(jsonData) {
-//note: entire js file is wrapped in this jquery json loader
-
-    console.log("POINTA");
-    console.log(jsonData.time);
-    var gg = jsonData.time.map(function(d) { return new Date(d)});
-    console.log(gg);
 
 
-console.log(gg);
+var getJsonFile = function(filename) {
+
+  var resultArr = [];
+
+  $.ajax({
+    url: filename,
+    dataType: 'json',
+    async: false,
+    success: function(jsonData) {
+      var jsonTime = jsonData.time.map(function(d) { return new Date(d)});
+
+      for(var i=0; i<jsonTime.length; i++) {
+        var graphPoint = {};
+        graphPoint.x = jsonTime[i];
+        graphPoint.y = jsonData.ask[i];
+        resultArr.push(graphPoint);
+      }
+
+    },
+    error: function() {
+      alert('Error loading ');
+    }
+  });
+
+  // $.getJSON(filename, function(jsonData) {
+  //   var jsonTime = jsonData.time.map(function(d) { return new Date(d)});
+  //   var testValues = [];
+  //   for(var i=0; i<jsonTime.length; i++) {
+  //     var graphPoint = {};
+  //     graphPoint.x = jsonTime[i];
+  //     graphPoint.y = jsonData.ask[i];
+  //     resultArr.push(graphPoint);
+  //   }
+  // });
+  
+  return resultArr;
+};
+
+
+
 
 var testdata = [
   {
     "key" : "Equity GOOG" ,
-    "bar": true,
-    "values" : [ [ new Date(2012,1,2) , 1271000.0] , [ new Date(2012,1,3) , 1271000.0] , [ new Date(2012,1,4) , 1271090.51] ]
+    "bar": false,
+    "values" : [ ]
   },
   {
     "key" : "Option 12" ,
-    "values" : [ [ new Date(2012,1,2) , 71.89] , [ new Date(2012,1,3) , 75.51] , [ new Date(2012,1,4) , 75.51] ]
+    "bar": true,
+    "values" : [ ]
   }
-].map(function(series) {
-  series.values = series.values.map(function(d) { return {x: d[0], y: d[1] } });
-  return series;
-});
+];
+
+testdata[0].values = getJsonFile('/mnt/eqJson/2014/02/11/RIO');
+testdata[1].values = getJsonFile('/mnt/eqJson/2014/02/11/RIO:2014:2:22:CALL:55.00');
+console.log(testdata[0]);
 
 
 nv.addGraph(function() {
@@ -73,5 +106,3 @@ nv.addGraph(function() {
 
 
 
-});
-});
