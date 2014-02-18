@@ -2,6 +2,7 @@ var datesEquityFile = '/mnt/tradingData/datesEquity.json';
 var startDate = null;
 var endDate = null;
 var eqAttribute = null;     //which equity variable to show, i.e. ask, askSize, volume, etc
+var allDatesCache = null;
 
 var attributeEnum = {
     time : 0,
@@ -20,6 +21,14 @@ var populateDateDropdown = function(allDates) {
         $( "#endDateDropdown" ).append( "<li><a href=\"javascript:setDates("+allDates[i]+",false)\">" + allDates[i] + "</a></li>" );
     }
 }
+var repopulateDateDropdown = function() {   //shorten enddate list 
+    $( "#endDateDropdown" ).empty();
+    for(var i=0; i<allDatesCache.length; i++) {
+        if( !startDate || stringToDate(allDatesCache[i]+"") > startDate ) {
+            $( "#endDateDropdown" ).append( "<li><a href=\"javascript:setDates("+allDatesCache[i]+",false)\">" + allDatesCache[i] + "</a></li>" );
+        }
+    }
+}
 
 var populateEquityAttributeDropdown = function() {
     for( var attr in attributeEnum ) {
@@ -34,6 +43,7 @@ $.ajax({
     dataType: 'json',
     async: false,
     success: function(jsonData) {
+        allDatesCache = jsonData.dates;
         populateDateDropdown(jsonData.dates);
         populateEquityAttributeDropdown();
     },
@@ -79,7 +89,7 @@ var setDates = function(dateText, startDateFlag) {
             alert("Invalid date selection");
         }
     }
-
+    repopulateDateDropdown();
     if( startDate && endDate && eqAttribute) {
         //if both dates are available, show equities
         displayEquityList();
