@@ -2,29 +2,10 @@
 <meta charset="utf-8">
 
 <link type="text/css" href="styles/nv.d3.css" rel="stylesheet">
+<link type="text/css" href="styles/bootstrap.css" rel="stylesheet">
+<link type="text/css" href="styles/bootstrap-theme.min.css" rel="stylesheet">
+<link type="text/css" href="styles/EquityChartStyle.css" rel="stylesheet">
 
-<style>
-body {
-  overflow-y:scroll;
-}
-
-text {
-  font: 12px sans-serif;
-}
-
-#chart1 svg {
-  height: 500px;
-  margin: 10px;
-  min-width: 100px;
-  min-height: 100px;
-/*
-  Minimum height and width is a good idea to prevent negative SVG dimensions...
-  For example width should be =< margin.left + margin.right + 1,
-  of course 1 pixel for the entire chart would not be very useful, BUT should not have errors
-*/
-}
-
-</style>
 <body>
 
   <div id="chart1" class='with-3d-shadow with-transitions'>
@@ -32,9 +13,32 @@ text {
   </div>
 
 
+  <div class="btn-group">
+    <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" id="startDateDisplay">
+      StartDate </button>
+    <ul class="dropdown-menu" role="menu" id="startDateDropdown" />
+  </div>
+
+  <div class="btn-group">
+    <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" id="endDateDisplay">
+      EndDate </button>
+
+    <ul class="dropdown-menu" role="menu" id="endDateDropdown" />
+  </div>
+
+  <div class="btn-group">
+    <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" id="eqAttrDisplay">
+      Equity Attribute </button>
+
+    <ul class="dropdown-menu" role="menu" id="equityAttributeDropdown" />
+  </div>
+
+
+
 </body> 
 
 <script type="text/javascript" src="js/jquery-1.10.1.min.js"></script>
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
 <script src="js/nvd3_lib/d3.v3.js"></script>
 <script src="js/nvd3_lib/nv.d3.js"></script>
 <script src="js/nvd3_lib/utils.js"></script>
@@ -45,6 +49,7 @@ text {
 <script src="js/nvd3_lib/line.js"></script>
 <script src="js/nvd3_lib/historicalBar.js"></script>
 <script src="js/nvd3_lib/linePlusBarWithFocusChart.js"></script>
-<script src="js/eqChart.js"></script>
-
+<script src="js/dataManagement.js"></script>
+<script src="js/equityChartJS/eqChart.js"></script>
+<script src="js/equityChartJS/variableSelection.js"></script>
 </html>

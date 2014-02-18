@@ -1,14 +1,18 @@
 
 
-var getJsonFile = function(filename) {
-
-  var resultArr = [];
+var addJsonFile = function(filename, bar, key, data) {
+  //loads values from json file and put it to test data
+  var equityMap = {};
+  equityMap["key"] = key;
+  equityMap["bar"] = bar;
+  //equityMap["values"] -> get it from the json
 
   $.ajax({
     url: filename,
     dataType: 'json',
     async: false,
     success: function(jsonData) {
+      var resultArr = [];
       var jsonTime = jsonData.time.map(function(d) { return new Date(d)});
 
       for(var i=0; i<jsonTime.length; i++) {
@@ -17,47 +21,35 @@ var getJsonFile = function(filename) {
         graphPoint.y = jsonData.ask[i];
         resultArr.push(graphPoint);
       }
-
+      equityMap["values"] = resultArr;
     },
     error: function() {
       alert('Error loading ');
     }
   });
-
-  // $.getJSON(filename, function(jsonData) {
-  //   var jsonTime = jsonData.time.map(function(d) { return new Date(d)});
-  //   var testValues = [];
-  //   for(var i=0; i<jsonTime.length; i++) {
-  //     var graphPoint = {};
-  //     graphPoint.x = jsonTime[i];
-  //     graphPoint.y = jsonData.ask[i];
-  //     resultArr.push(graphPoint);
-  //   }
-  // });
   
-  return resultArr;
+  data.push(equityMap);
 };
 
 
 
+//data format:
+// var chartData = [
+//   {
+//     "key" : "Equity GOOG" ,
+//     "bar": false,
+//     "values" : [ ]
+//   },
+//   {
+//     "key" : "Option 12" ,
+//     "bar": true,
+//     "values" : [ ]
+//   }
+// ];
 
-var testdata = [
-  {
-    "key" : "Equity GOOG" ,
-    "bar": false,
-    "values" : [ ]
-  },
-  {
-    "key" : "Option 12" ,
-    "bar": true,
-    "values" : [ ]
-  }
-];
-
-testdata[0].values = getJsonFile('/mnt/eqJson/2014/02/11/RIO');
-testdata[1].values = getJsonFile('/mnt/eqJson/2014/02/11/RIO:2014:2:22:CALL:55.00');
-console.log(testdata[0]);
-
+var chartData = [];
+addJsonFile('/mnt/eqJson/2014/02/11/RIO', false, "RIO", chartData);
+addJsonFile('/mnt/eqJson/2014/02/11/RIO:2014:2:22:CALL:55.00', true, "RIO_CALL", chartData);
 
 nv.addGraph(function() {
     var chart = nv.models.linePlusBarWithFocusChart()
@@ -67,7 +59,7 @@ nv.addGraph(function() {
 
     chart.xAxis.tickFormat(function(d) {
 
-      var dx = testdata[0].values[d] && testdata[0].values[d].x || 0;
+      var dx = chartData[0].values[d] && chartData[0].values[d].x || 0;
       if (dx > 0) {
           return d3.time.format('%x')(new Date(dx))
       }
@@ -75,7 +67,7 @@ nv.addGraph(function() {
     });
 
     chart.x2Axis.tickFormat(function(d) {
-      var dx = testdata[0].values[d] && testdata[0].values[d].x || 0;
+      var dx = chartData[0].values[d] && chartData[0].values[d].x || 0;
       return d3.time.format('%x')(new Date(dx))
     });
     
@@ -94,9 +86,9 @@ nv.addGraph(function() {
     chart.bars.forceY([0]);
     chart.bars2.forceY([0]);
     //chart.lines.forceY([0]);
-    nv.log(testdata);
+    nv.log(chartData);
     d3.select('#chart1 svg')
-        .datum(testdata)
+        .datum(chartData)
         .call(chart);
 
 //    nv.utils.windowResize(chart.update);
