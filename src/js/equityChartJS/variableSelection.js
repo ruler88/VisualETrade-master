@@ -2,7 +2,9 @@ var datesEquityFile = '/mnt/tradingData/datesEquity.json';
 var startDate = null;
 var endDate = null;
 var eqAttribute = null;     //which equity variable to show, i.e. ask, askSize, volume, etc
+var equityMap = {};
 var allDatesCache = null;
+var datesJsonData = null;
 
 var attributeEnum = {
     time : 0,
@@ -24,7 +26,7 @@ var populateDateDropdown = function(allDates) {
 var repopulateDateDropdown = function() {   //shorten enddate list 
     $( "#endDateDropdown" ).empty();
     for(var i=0; i<allDatesCache.length; i++) {
-        if( !startDate || stringToDate(allDatesCache[i]+"") > startDate ) {
+        if( !startDate || stringToDate(allDatesCache[i]+"") >= startDate ) {
             $( "#endDateDropdown" ).append( "<li><a href=\"javascript:setDates("+allDatesCache[i]+",false)\">" + allDatesCache[i] + "</a></li>" );
         }
     }
@@ -44,6 +46,7 @@ $.ajax({
     async: false,
     success: function(jsonData) {
         allDatesCache = jsonData.dates;
+        datesJsonData = jsonData;
         populateDateDropdown(jsonData.dates);
         populateEquityAttributeDropdown();
     },
@@ -54,7 +57,11 @@ $.ajax({
 
 
 var displayEquityList = function() {
-    //TODO show equity list at bottom
+    if( ! (startDate && endDate) ) { return; }  //not enough data to display
+    
+    
+    dateToString(startDate);
+
 
 }
 
@@ -72,7 +79,7 @@ var setDates = function(dateText, startDateFlag) {
     var newDate = stringToDate(dateText+"");
     if(startDateFlag) {
         //set start date
-        if(!endDate || endDate > newDate) {
+        if(!endDate || endDate >= newDate) {
             startDate = newDate;
             $( "#startDateDisplay" ).empty();
             $( "#startDateDisplay" ).append(dateText);
@@ -81,7 +88,7 @@ var setDates = function(dateText, startDateFlag) {
         }
     } else {
         //set end date
-        if(!startDate || startDate < newDate) {
+        if(!startDate || startDate <= newDate) {
             endDate = newDate;
             $( "#endDateDisplay" ).empty();
             $( "#endDateDisplay" ).append(dateText);

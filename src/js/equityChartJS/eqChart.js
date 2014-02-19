@@ -51,6 +51,7 @@ var chartData = [];
 addJsonFile('/mnt/eqJson/2014/02/11/RIO', false, "RIO", chartData);
 addJsonFile('/mnt/eqJson/2014/02/11/RIO:2014:2:22:CALL:55.00', true, "RIO_CALL", chartData);
 
+
 nv.addGraph(function() {
     var chart = nv.models.linePlusBarWithFocusChart()
         .margin({top: 30, right: 60, bottom: 50, left: 70})

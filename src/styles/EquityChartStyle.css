@@ -6,9 +6,58 @@ text {
   font: 12px sans-serif;
 }
 
+.buttonMargin {
+	margin-left:1.5cm;
+}
+
+.equityMargin {
+	margin-left:1.5cm;
+	margin-top: 0.5cm;
+  margin-bottom: 0.5cm;
+}
+
+.underlier {
+	width: 150px; 
+	height: 120px;
+	float:left; 
+}
+
+.optionCall {
+width:75%; height:60px; float:left;
+margin-left:10px;
+}
+
+.optionButton {
+  width: 50px;
+  height: 60px;
+  float:left;
+}
+
+
+/*
+#upleft { 
+   width:100px; 
+   height: 300px; 
+   background:red; float:left; 
+}
+
+#upright { 
+   width:300px; 
+   height:200px; 
+   background:blue; 
+   float:left
+}
+#below { 
+   height:300px; 
+   width:400px; 
+   background:green 
+}
+*/
+
 #chart1 svg {
   height: 500px;
   margin: 10px;
   min-width: 100px;
   min-height: 100px;
+  margin-bottom: 15px;
 }

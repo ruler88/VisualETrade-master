@@ -20,6 +20,13 @@ var stringToDate = function(dateString) {
     return new Date(extractYear(dateString), extractMonth(dateString), extractDay(dateString));
 }
 
+var dateToString = function(date) {
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1;
+    var day = date.getDate();
+    return "" + year + String("00"+month).slice(-2) + String("00"+day).slice(-2);
+}
+
 var generateTableHtml = function(availableDates) {
     //generate the HTML code for date table
     var tableHtml = new Array();
