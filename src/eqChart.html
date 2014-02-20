@@ -5,7 +5,7 @@
 <link type="text/css" href="styles/bootstrap.css" rel="stylesheet">
 <link type="text/css" href="styles/bootstrap-theme.min.css" rel="stylesheet">
 <link type="text/css" href="styles/EquityChartStyle.css" rel="stylesheet">
-<title> Sexy Equity </title>
+<title> Awesome Equity Chart </title>
 <body>
 
   <div id="chart1" class='with-3d-shadow with-transitions'>
@@ -32,20 +32,10 @@
     <ul class="dropdown-menu" role="menu" id="equityAttributeDropdown" />
   </div>
 
+  <button type="button" class="btn btn-info btn-sm" onclick="dummyDataButton()">TEST</button>
 
-  <div class="equityMargin" id="equityButtons">
-    <div class="underlier">
-      <button type="button" class="btn btn-primary btn-lg underlier">GOOG</button>
-    </div>
-    <div class="optionCall">
-      <button type="button" class="btn btn-primary btn-sm optionButton">A</button>
-      <button type="button" class="btn btn-primary btn-sm optionButton">B</button>
 
-    </div>
-    <div class="optionCall">
-      <button type="button" class="btn btn-primary btn-sm optionButton">Small button</button>
-    </div>
-  </div>
+  <div id="equityButtonPlaceHolder"></div>
 
 
 </body> 
@@ -62,6 +52,7 @@
 <script src="js/nvd3_lib/line.js"></script>
 <script src="js/nvd3_lib/historicalBar.js"></script>
 <script src="js/nvd3_lib/linePlusBarWithFocusChart.js"></script>
+<script src="js/equityChartJS/utils.js"></script>
 <script src="js/dataManagement.js"></script>
 <script src="js/equityChartJS/eqChart.js"></script>
 <script src="js/equityChartJS/variableSelection.js"></script>

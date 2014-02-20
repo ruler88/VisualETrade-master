@@ -11,26 +11,32 @@ text {
 }
 
 .equityMargin {
+  padding-top: 0.5cm;
 	margin-left:1.5cm;
-	margin-top: 0.5cm;
-  margin-bottom: 0.5cm;
+  width: 99cm;
+  clear:both;
 }
 
 .underlier {
 	width: 150px; 
 	height: 120px;
-	float:left; 
+  float: left;
 }
 
-.optionCall {
-width:75%; height:60px; float:left;
-margin-left:10px;
+.optionBlock {
+  width:75%; 
+  height:60px; 
+  float:left;
+  margin-left:10px;
 }
 
 .optionButton {
-  width: 50px;
+  width: 60px;
   height: 60px;
+  margin-left: 2px;
+  text-align:center;
   float:left;
+  white-space: normal;
 }
 
 

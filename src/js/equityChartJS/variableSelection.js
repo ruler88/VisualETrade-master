@@ -55,14 +55,42 @@ $.ajax({
     }
 });
 
-
 var displayEquityList = function() {
+    for( var underlier in equityMap ) {
+        var equityGroup = equityMap[underlier];
+        $( "#equityButtonPlaceHolder" ).after(generateEquityButtonHtml(underlier, equityGroup));
+    }
+}
+
+var loadEquityList = function() {
     if( ! (startDate && endDate) ) { return; }  //not enough data to display
     
-    
-    dateToString(startDate);
+    while(startDate <= endDate) {
+        var dateString = dateToString(startDate);
+        var dailyEquity = datesJsonData[dateString];
+        if(dailyEquity) {       //only available date
+            for( var i=0; i<dailyEquity.length; i++ ) {
+                var tmpEq = dailyEquity[i];
+                var underlier = isUnderlier(tmpEq) ? tmpEq : extractUndelier(tmpEq);   //extract underlier if needed
+                
+                if( !equityMap[underlier] ) {   //initialize underlier map if it doesn't already exist
+                    equityMap[underlier] = {};
+                }
 
+                if( !isUnderlier(tmpEq) ) {  //use map-of-map datastructure to store the equities
+                    var optionType = getOptionType(tmpEq);
+                    if( !equityMap[underlier][optionType] ) {
+                        equityMap[underlier][optionType] = {};
+                    }
+                    equityMap[underlier][optionType][tmpEq] = true;
+                }
+            }
+        }
+        
+        startDate = d3.time.day.offset(startDate, 1);
+    }
 
+    displayEquityList();
 }
 
 var setAttribute = function(attribute) {
@@ -71,7 +99,7 @@ var setAttribute = function(attribute) {
     $( "#eqAttrDisplay" ).append(attribute);
     if( startDate && endDate && eqAttribute) {
         //if both dates are available, show equities
-        displayEquityList();
+        loadEquityList();
     }
 }
 
@@ -99,6 +127,16 @@ var setDates = function(dateText, startDateFlag) {
     repopulateDateDropdown();
     if( startDate && endDate && eqAttribute) {
         //if both dates are available, show equities
-        displayEquityList();
+        loadEquityList();
     }
+}
+
+var dummyDataButton = function() {  //remove later
+    setDates("20140201", true);
+    setDates("20140219", false);
+    setAttribute("ask");
+}
+
+var equityButtonClick = function(equityName) {
+    alert(equityName);
 }
