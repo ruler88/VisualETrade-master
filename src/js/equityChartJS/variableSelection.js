@@ -6,6 +6,10 @@ var equityMap = {};
 var allDatesCache = null;
 var datesJsonData = null;
 
+var manifestSwitcher = true; //this variable switches between true and false for bar/line equity
+var primaryEquity = null;
+var secondaryEquity = null;
+
 var attributeEnum = {
     time : 0,
     ask : 1,
@@ -131,12 +135,26 @@ var setDates = function(dateText, startDateFlag) {
     }
 }
 
+var showChart = function() {
+
+}
+
+var equityButtonClick = function(equityName) {
+    if( !primaryEquity || manifestSwitcher ) {
+        primaryEquity = equityName;
+        $("#primaryEquity").text(equityName);
+    } else {
+        secondaryEquity = equityName;
+        $("#secondaryEquity").text(equityName);
+    }
+    manifestSwitcher = !manifestSwitcher;
+    if(primaryEquity && secondaryEquity) {
+        showChart();
+    }
+}
+
 var dummyDataButton = function() {  //remove later
     setDates("20140201", true);
     setDates("20140219", false);
     setAttribute("ask");
-}
-
-var equityButtonClick = function(equityName) {
-    alert(equityName);
 }
