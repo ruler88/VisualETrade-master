@@ -1,3 +1,12 @@
+var dateFilepathString = function(date) {
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1;
+    var day = date.getDate();
+    return year + "/" + 
+    	String("00"+month).slice(-2) + "/" +
+    	String("00"+day).slice(-2);
+}
+
 var isUnderlier = function(equityName) {
 	if(equityName.indexOf(":") == -1) {
 		return true;

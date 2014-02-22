@@ -68,9 +68,9 @@ var displayEquityList = function() {
 
 var loadEquityList = function() {
     if( ! (startDate && endDate) ) { return; }  //not enough data to display
-    
-    while(startDate <= endDate) {
-        var dateString = dateToString(startDate);
+    var localStartDate = startDate;
+    while(localStartDate <= endDate) {
+        var dateString = dateToString(localStartDate);
         var dailyEquity = datesJsonData[dateString];
         if(dailyEquity) {       //only available date
             for( var i=0; i<dailyEquity.length; i++ ) {
@@ -91,7 +91,7 @@ var loadEquityList = function() {
             }
         }
         
-        startDate = d3.time.day.offset(startDate, 1);
+        localStartDate = d3.time.day.offset(localStartDate, 1);
     }
 
     displayEquityList();
@@ -136,16 +136,20 @@ var setDates = function(dateText, startDateFlag) {
 }
 
 var showChart = function() {
+    var chartData = [];
+    addJsonFile(startDate, endDate, false, primaryEquity,chartData);
+    addJsonFile(startDate, endDate, true, secondaryEquity,chartData);
 
+    addGraph(chartData);
 }
 
 var equityButtonClick = function(equityName) {
     if( !primaryEquity || manifestSwitcher ) {
         primaryEquity = equityName;
-        $("#primaryEquity").text(equityName);
+        $("#primaryEquity").text(primaryEquity);
     } else {
         secondaryEquity = equityName;
-        $("#secondaryEquity").text(equityName);
+        $("#secondaryEquity").text(secondaryEquity);
     }
     manifestSwitcher = !manifestSwitcher;
     if(primaryEquity && secondaryEquity) {
@@ -154,7 +158,7 @@ var equityButtonClick = function(equityName) {
 }
 
 var dummyDataButton = function() {  //remove later
-    setDates("20140201", true);
-    setDates("20140219", false);
+    setDates("20140212", true);
+    setDates("20140216", false);
     setAttribute("ask");
 }

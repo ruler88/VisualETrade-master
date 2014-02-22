@@ -1,33 +1,42 @@
+var convertDateToFile = function(date, equity) {
+  return "/mnt/eqJson/" + dateFilepathString(date) + "/" + equity;
+}
 
-
-var addJsonFile = function(filename, bar, key, data) {
+var addJsonFile = function(startDate, endDate, bar, key, data) {
   //loads values from json file and put it to test data
   var equityMap = {};
   equityMap["key"] = key;
   equityMap["bar"] = bar;
   //equityMap["values"] -> get it from the json
 
-  $.ajax({
-    url: filename,
-    dataType: 'json',
-    async: false,
-    success: function(jsonData) {
-      var resultArr = [];
-      var jsonTime = jsonData.time.map(function(d) { return new Date(d)});
+  while( startDate <= endDate ) {
+    var filename = convertDateToFile(startDate, key);
+    var resultArr = [];
 
-      for(var i=0; i<jsonTime.length; i++) {
-        var graphPoint = {};
-        graphPoint.x = jsonTime[i];
-        graphPoint.y = jsonData.ask[i];
-        resultArr.push(graphPoint);
+    $.ajax({
+      url: filename,
+      dataType: 'json',
+      async: false,
+      success: function(jsonData) {
+        console.log("successfully loaded: " + filename);
+        var jsonTime = jsonData.time.map(function(d) { return new Date(d)});
+
+        for(var i=0; i<jsonTime.length; i++) {
+          var graphPoint = {};
+          graphPoint.x = jsonTime[i];
+          graphPoint.y = jsonData.ask[i];
+          resultArr.push(graphPoint);
+        }
+      },
+      error: function() {
+        //file does not exist
       }
-      equityMap["values"] = resultArr;
-    },
-    error: function() {
-      alert('Error loading ');
-    }
-  });
-  
+    });
+
+    equityMap["values"] = resultArr;
+    startDate = d3.time.day.offset(startDate, 1);
+  }
+
   data.push(equityMap);
 };
 
@@ -47,10 +56,7 @@ var addJsonFile = function(filename, bar, key, data) {
 //   }
 // ];
 
-var chartData = [];
-addJsonFile('/mnt/eqJson/2014/02/11/RIO', false, "RIO", chartData);
-addJsonFile('/mnt/eqJson/2014/02/11/RIO:2014:2:22:CALL:55.00', true, "RIO_CALL", chartData);
-
+var addGraph = function(chartData) {
 
 nv.addGraph(function() {
     var chart = nv.models.linePlusBarWithFocusChart()
@@ -96,6 +102,6 @@ nv.addGraph(function() {
 
     return chart;
 });
-
+};
 
 
