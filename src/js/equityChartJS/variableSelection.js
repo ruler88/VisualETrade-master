@@ -21,7 +21,7 @@ var attributeEnum = {
 };
 
 var populateDateDropdown = function(allDates) {
-    for(var i=allDates.length-1; i>=0; i--) {
+    for (var i=allDates.length-1; i>=0; i--) {
         //using startDateFlag to determine which dropdown
         $( "#startDateDropdown" ).append( "<li><a href=\"javascript:setDates("+allDates[i]+",true)\">" + allDates[i] + "</a></li>" );
         $( "#endDateDropdown" ).append( "<li><a href=\"javascript:setDates("+allDates[i]+",false)\">" + allDates[i] + "</a></li>" );
@@ -141,12 +141,36 @@ var setDates = function(dateText, startDateFlag) {
     }
 }
 
+var showOptionCharts = function(chartData) {
+    var spreadChartName = "optionSpreadChart";
+    var spreadChartData = [];
+    
+    // showOptionDelta(chartData, spreadChartData, 1, "line");
+    // showOptionDelta(chartData, spreadChartData, 1, "line");
+
+
+    addJsonFile(startDate, endDate, "bar", secondaryEquity, 2, eqAttribute, spreadChartData, bidAskSpread, "AbsSpread");
+    addJsonFile(startDate, endDate, "line", secondaryEquity, 1, eqAttribute, spreadChartData, bidAskPercent, "RelSpread");
+
+    $("#mainChart").after("<div id=\'" + spreadChartName + "\' class=\'with-3d-shadow with-transitions nvChart optionSeries\'><svg></svg></div>");
+
+    addGraph(spreadChartData, spreadChartName, "RelSpread", "AbsSpread");   //adding to mainchart
+}
+
 var showChart = function() {
+    $(".optionSeries").remove();
     var chartData = [];
     addJsonFile(startDate, endDate, "line", primaryEquity, 1, eqAttribute, chartData);
     addJsonFile(startDate, endDate, "bar", secondaryEquity, 2, eqAttribute, chartData);
 
-    addGraph(chartData);
+    addGraph(chartData, "mainChart", primaryEquity, secondaryEquity);   //adding to mainchart
+    
+
+    if( isUnderlier(primaryEquity) && !isUnderlier(secondaryEquity) ) {
+        //XOR operation for one option one non-option additional charts
+        //user use with caution! someone might use different underliers, not checked
+        showOptionCharts(chartData);
+    }
     delete chartData;
 }
 
@@ -165,11 +189,7 @@ var equityButtonClick = function(equityName) {
 }
 
 var dummyDataButton = function() {  //remove later
-    setDates("20140214", true);
+    setDates("20140221", true);
     setDates("20140221", false);
     setAttribute("ask");
-
-    //var chartData = [];
-
-    //addGraph(chartData);
 }

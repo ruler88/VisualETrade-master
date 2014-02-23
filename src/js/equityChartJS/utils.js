@@ -71,6 +71,11 @@ var generateEquityButtonHtml = function(underlier, optionMap) {
 	return htmlString;
 }
 
+Date.prototype.addHours= function(h){
+    this.setHours(this.getHours()+h);
+    return this;
+}
+
 /*
 <div class="equityMargin" id="equityButtons">
     <div class="underlier">

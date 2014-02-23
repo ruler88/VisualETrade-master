@@ -6,6 +6,10 @@ text {
   font: 12px sans-serif;
 }
 
+.tick line{
+  opacity: 0.2;
+}
+
 .buttonMargin {
 	margin-left:1.5cm;
 }
@@ -39,7 +43,7 @@ text {
   white-space: normal;
 }
 
-#chart1 svg {
+.nvChart {
   height: 500px;
   margin: 10px;
   min-width: 100px;

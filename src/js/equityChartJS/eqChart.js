@@ -2,14 +2,23 @@ var convertDateToFile = function(date, equity) {
   return "/mnt/eqJson/" + dateFilepathString(date) + "/" + equity;
 }
 
-var addJsonFile = function(startDate, endDate, type, key, yAxis, attribute, data) {
+var bidAskSpread = function(jsonData, i) {
+  return jsonData["ask"][i] - jsonData["bid"][i];
+}
+var bidAskPercent = function(jsonData, i) {
+  if( jsonData["bid"][i] == 0 ) return 0;
+  return (jsonData["ask"][i] - jsonData["bid"][i]) / jsonData["bid"][i];
+}
+
+
+var addJsonFile = function(startDate, endDate, type, key, yAxis, attribute, data, dataProcFunction, specialLabel) {
   //loads values from json file and put it to test data
   var equityMap = {};
-  equityMap["key"] = attribute + ":" + key;
+  equityMap["key"] = specialLabel ? specialLabel : attribute + ":" + key;
   equityMap["type"] = type;
   equityMap["yAxis"] = yAxis;
 
-var resultArr = [];
+  var resultArr = [];
   while( startDate <= endDate ) {
     var filename = convertDateToFile(startDate, key);
     
@@ -19,12 +28,18 @@ var resultArr = [];
       async: false,
       success: function(jsonData) {
         console.log("successfully loaded: " + filename);
-        var jsonTime = jsonData.time.map(function(d) { return new Date(d)});
+        var jsonTime = jsonData.time.map(function(d) { return new Date(d).addHours(3)});
 
         for(var i=0; i<jsonTime.length; i++) {
           var graphPoint = {};
           graphPoint.x = jsonTime[i];
-          graphPoint.y = jsonData[attribute][i];
+
+          if(!dataProcFunction) {
+            graphPoint.y = jsonData[attribute][i];
+          } else {
+            graphPoint.y = dataProcFunction(jsonData, i);
+          }
+          
           resultArr.push(graphPoint);
         }
       },
@@ -37,7 +52,38 @@ var resultArr = [];
   //console.log(resultArr);
   equityMap["values"] = resultArr;
   data.push(equityMap);
-};
+}
+
+var showOptionDelta = function(chartData, optionChartData, yAxis, type) {
+  var underlierVals = chartData[0]["values"];
+  var optionVals = chartData[1]["values"];
+  var deltaArr = [];
+  var equityMap = {};
+
+  if(!underlierVals || !optionVals || 
+    underlierVals.length<2 || optionVals.length <2 || 
+    underlierVals.length != optionVals.length) {
+    alert("SOMETHING FUCKED UP");
+    return;
+  }
+  for( var i=1; i<underlierVals.length; i++ ) {
+    if(underlierVals[i].x.getTime() != optionVals[i].x.getTime()) {
+      // alert("time mismatch");
+      // return;
+    }
+    if( Math.abs(underlierVals[i].y - underlierVals[i-1].y) < 0.01 ) { continue; }
+    var delta = (optionVals[i].y - optionVals[i-1].y) / (underlierVals[i].y - underlierVals[i-1].y);
+    var graphPoint = {};
+    graphPoint.x = underlierVals[i].x;
+    graphPoint.y = delta;
+    deltaArr.push(graphPoint);
+  }
+  equityMap["values"] = deltaArr;
+  equityMap["type"] = type;
+  equityMap["yAxis"] = yAxis;
+  equityMap["key"] = "OptionDelta";
+  optionChartData.push(equityMap);
+}
 
 
 
@@ -56,7 +102,7 @@ var resultArr = [];
 // ];
 
 
-var addGraph = function(chartData) {
+var addGraph = function(chartData, chartId, primaryAxisLabel, secondaryAxisLabel) {
 
   nv.addGraph(function() {
       var chart = nv.models.multiChart()
@@ -64,21 +110,21 @@ var addGraph = function(chartData) {
           .color(d3.scale.category10().range());
 
       chart.xAxis.tickFormat(function(d) {
-        var dx = chartData[0].values[d] && chartData[0].values[d].x || 0;
-        if (dx > 0) {
-            return d3.time.format('%m/%d-%I:%M:%S')(new Date(dx))
-        }
-        return d;
+        return d3.time.format('%b %d %I:%M:%S%p')(new Date(d))
       });
 
       chart.yAxis1
-          .tickFormat(d3.format(',.1f'));
+          .tickFormat(d3.format(',.2f'))
+          .axisLabel(primaryAxisLabel);
 
       chart.yAxis2
-          .tickFormat(d3.format(',.1f'));
+          .tickFormat(d3.format(',.2f'))
+          .axisLabel(secondaryAxisLabel);
 
+      chart.xAxis
+           .axisLabel('Date');
 
-      d3.select('#chart1 svg')
+      d3.select('#'+ chartId + ' svg')
         .datum(chartData)
         .transition().duration(500).call(chart);
 
@@ -135,30 +181,3 @@ nv.addGraph(function() {
 });
 */
 };
-
-
-
-// var testData = [];
-
-// var genRandom = function(type, yAxis) {
-//   var valMap = {};
-//   var tmpArr = [];
-//   for(var i=0; i<=10; i++) {
-//     var graphPoint = {};
-//     graphPoint.x = i;
-//     graphPoint.y = Math.random() * 100;
-//     tmpArr.push(graphPoint); 
-//   }
-//   valMap.values = tmpArr;
-//   valMap.type = type;
-//   valMap.yAxis = yAxis;
-//   return valMap;
-// }
-
-
-// testData.push(genRandom("line", 1));
-// testData.push(genRandom("bar", 1));
-// testData.push(genRandom("area", 2));
-// addGraph(testData);
-
-
