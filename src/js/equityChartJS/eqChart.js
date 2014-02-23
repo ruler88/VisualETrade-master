@@ -2,11 +2,12 @@ var convertDateToFile = function(date, equity) {
   return "/mnt/eqJson/" + dateFilepathString(date) + "/" + equity;
 }
 
-var addJsonFile = function(startDate, endDate, bar, key, attribute, data) {
+var addJsonFile = function(startDate, endDate, type, key, yAxis, attribute, data) {
   //loads values from json file and put it to test data
   var equityMap = {};
   equityMap["key"] = attribute + ":" + key;
-  equityMap["bar"] = bar;
+  equityMap["type"] = type;
+  equityMap["yAxis"] = yAxis;
 
 var resultArr = [];
   while( startDate <= endDate ) {
@@ -54,8 +55,37 @@ var resultArr = [];
 //   }
 // ];
 
+
 var addGraph = function(chartData) {
 
+  nv.addGraph(function() {
+      var chart = nv.models.multiChart()
+          .margin({top: 30, right: 60, bottom: 50, left: 70})
+          .color(d3.scale.category10().range());
+
+      chart.xAxis.tickFormat(function(d) {
+        var dx = chartData[0].values[d] && chartData[0].values[d].x || 0;
+        if (dx > 0) {
+            return d3.time.format('%m/%d-%I:%M:%S')(new Date(dx))
+        }
+        return d;
+      });
+
+      chart.yAxis1
+          .tickFormat(d3.format(',.1f'));
+
+      chart.yAxis2
+          .tickFormat(d3.format(',.1f'));
+
+
+      d3.select('#chart1 svg')
+        .datum(chartData)
+        .transition().duration(500).call(chart);
+
+      return chart;
+  });
+
+/*
 nv.addGraph(function() {
     var chart = nv.models.linePlusBarWithFocusChart()
         .margin({top: 30, right: 60, bottom: 50, left: 70})
@@ -103,6 +133,32 @@ nv.addGraph(function() {
 
     return chart;
 });
+*/
 };
+
+
+
+// var testData = [];
+
+// var genRandom = function(type, yAxis) {
+//   var valMap = {};
+//   var tmpArr = [];
+//   for(var i=0; i<=10; i++) {
+//     var graphPoint = {};
+//     graphPoint.x = i;
+//     graphPoint.y = Math.random() * 100;
+//     tmpArr.push(graphPoint); 
+//   }
+//   valMap.values = tmpArr;
+//   valMap.type = type;
+//   valMap.yAxis = yAxis;
+//   return valMap;
+// }
+
+
+// testData.push(genRandom("line", 1));
+// testData.push(genRandom("bar", 1));
+// testData.push(genRandom("area", 2));
+// addGraph(testData);
 
 

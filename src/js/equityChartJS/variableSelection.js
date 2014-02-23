@@ -143,8 +143,8 @@ var setDates = function(dateText, startDateFlag) {
 
 var showChart = function() {
     var chartData = [];
-    addJsonFile(startDate, endDate, false, primaryEquity, eqAttribute, chartData);
-    addJsonFile(startDate, endDate, true, secondaryEquity, eqAttribute, chartData);
+    addJsonFile(startDate, endDate, "line", primaryEquity, 1, eqAttribute, chartData);
+    addJsonFile(startDate, endDate, "bar", secondaryEquity, 2, eqAttribute, chartData);
 
     addGraph(chartData);
     delete chartData;
