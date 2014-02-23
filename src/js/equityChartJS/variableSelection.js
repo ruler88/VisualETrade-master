@@ -21,7 +21,7 @@ var attributeEnum = {
 };
 
 var populateDateDropdown = function(allDates) {
-    for(var i=0; i<allDates.length; i++) {
+    for(var i=allDates.length-1; i>=0; i--) {
         //using startDateFlag to determine which dropdown
         $( "#startDateDropdown" ).append( "<li><a href=\"javascript:setDates("+allDates[i]+",true)\">" + allDates[i] + "</a></li>" );
         $( "#endDateDropdown" ).append( "<li><a href=\"javascript:setDates("+allDates[i]+",false)\">" + allDates[i] + "</a></li>" );
@@ -29,7 +29,7 @@ var populateDateDropdown = function(allDates) {
 }
 var repopulateDateDropdown = function() {   //shorten enddate list 
     $( "#endDateDropdown" ).empty();
-    for(var i=0; i<allDatesCache.length; i++) {
+    for(var i=allDatesCache.length-1; i>=0; i--) {
         if( !startDate || stringToDate(allDatesCache[i]+"") >= startDate ) {
             $( "#endDateDropdown" ).append( "<li><a href=\"javascript:setDates("+allDatesCache[i]+",false)\">" + allDatesCache[i] + "</a></li>" );
         }
@@ -60,6 +60,7 @@ $.ajax({
 });
 
 var displayEquityList = function() {
+    $( ".equityMargin").remove();
     for( var underlier in equityMap ) {
         var equityGroup = equityMap[underlier];
         $( "#equityButtonPlaceHolder" ).after(generateEquityButtonHtml(underlier, equityGroup));
@@ -104,7 +105,12 @@ var setAttribute = function(attribute) {
     if( startDate && endDate && eqAttribute) {
         //if both dates are available, show equities
         loadEquityList();
+
+        if( primaryEquity && secondaryEquity ) {
+            showChart();
+        }
     }
+
 }
 
 var setDates = function(dateText, startDateFlag) {
@@ -137,8 +143,8 @@ var setDates = function(dateText, startDateFlag) {
 
 var showChart = function() {
     var chartData = [];
-    addJsonFile(startDate, endDate, false, primaryEquity,chartData);
-    addJsonFile(startDate, endDate, true, secondaryEquity,chartData);
+    addJsonFile(startDate, endDate, false, primaryEquity, eqAttribute, chartData);
+    addJsonFile(startDate, endDate, true, secondaryEquity, eqAttribute, chartData);
 
     addGraph(chartData);
 }
@@ -158,7 +164,13 @@ var equityButtonClick = function(equityName) {
 }
 
 var dummyDataButton = function() {  //remove later
-    setDates("20140212", true);
-    setDates("20140216", false);
+    setDates("20140221", true);
+    setDates("20140221", false);
     setAttribute("ask");
+
+    var chartData = [];
+    addJsonFile(startDate, endDate, true, "GOOG:2014:2:22:CALL:1202.50", "ask", chartData);
+    addJsonFile(startDate, endDate, false, "GOOG", "ask", chartData);
+
+    addGraph(chartData);
 }

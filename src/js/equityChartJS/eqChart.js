@@ -2,10 +2,10 @@ var convertDateToFile = function(date, equity) {
   return "/mnt/eqJson/" + dateFilepathString(date) + "/" + equity;
 }
 
-var addJsonFile = function(startDate, endDate, bar, key, data) {
+var addJsonFile = function(startDate, endDate, bar, key, attribute, data) {
   //loads values from json file and put it to test data
   var equityMap = {};
-  equityMap["key"] = key;
+  equityMap["key"] = attribute + ":" + key;
   equityMap["bar"] = bar;
   //equityMap["values"] -> get it from the json
 
@@ -24,7 +24,7 @@ var addJsonFile = function(startDate, endDate, bar, key, data) {
         for(var i=0; i<jsonTime.length; i++) {
           var graphPoint = {};
           graphPoint.x = jsonTime[i];
-          graphPoint.y = jsonData.ask[i];
+          graphPoint.y = jsonData[attribute][i];
           resultArr.push(graphPoint);
         }
       },
@@ -36,7 +36,7 @@ var addJsonFile = function(startDate, endDate, bar, key, data) {
     equityMap["values"] = resultArr;
     startDate = d3.time.day.offset(startDate, 1);
   }
-
+  
   data.push(equityMap);
 };
 
@@ -65,7 +65,6 @@ nv.addGraph(function() {
         .color(d3.scale.category10().range());
 
     chart.xAxis.tickFormat(function(d) {
-
       var dx = chartData[0].values[d] && chartData[0].values[d].x || 0;
       if (dx > 0) {
           return d3.time.format('%x')(new Date(dx))
@@ -79,10 +78,10 @@ nv.addGraph(function() {
     });
     
     chart.y1Axis
-        .tickFormat(d3.format(',f'));
+        .tickFormat(d3.format(',.2f'));
 
     chart.y3Axis
-        .tickFormat(d3.format(',f'));
+        .tickFormat(d3.format(',.2f'));
         
     chart.y2Axis
         .tickFormat(function(d) { return '$' + d3.format(',.2f')(d) });
@@ -93,12 +92,16 @@ nv.addGraph(function() {
     chart.bars.forceY([0]);
     chart.bars2.forceY([0]);
     //chart.lines.forceY([0]);
-    nv.log(chartData);
+
+    //nv.log(chartData);
+    d3.select('#chart1 svg').remove();
+    $('#chart1').append("<svg></svg>");
+
     d3.select('#chart1 svg')
         .datum(chartData)
         .call(chart);
 
-//    nv.utils.windowResize(chart.update);
+    nv.utils.windowResize(chart.update);
 
     return chart;
 });
