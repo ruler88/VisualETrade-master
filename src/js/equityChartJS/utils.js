@@ -76,6 +76,14 @@ Date.prototype.addHours= function(h){
     return this;
 }
 
+var swapOptionType = function(optionName) {
+	if(optionName.indexOf("CALL") != -1) {
+		return optionName.replace("CALL", "PUT");
+	} else {
+		return optionName.replace("PUT", "CALL");
+	}
+}
+
 /*
 <div class="equityMargin" id="equityButtons">
     <div class="underlier">

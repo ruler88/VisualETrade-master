@@ -144,16 +144,19 @@ var setDates = function(dateText, startDateFlag) {
 var showOptionCharts = function(chartData) {
     var spreadChartName = "optionSpreadChart";
     var spreadChartData = [];
+    var deltaChartName = "optionDeltaChart";
+    var deltaChartData = [];
     
-    // showOptionDelta(chartData, spreadChartData, 1, "line");
-    // showOptionDelta(chartData, spreadChartData, 1, "line");
+    addJsonFile(startDate, endDate, "bar", swapOptionType(secondaryEquity), 2, eqAttribute, chartData);
+    showOptionDelta(chartData, deltaChartData, 1, "line");
 
+    $("#mainChart").after("<div id=\'" + deltaChartName + "\' class=\'with-3d-shadow with-transitions nvChart optionSeries\'><svg></svg></div>");
+    addGraph(deltaChartData, deltaChartName, "Option A", "Option B");   //adding to mainchart
 
     addJsonFile(startDate, endDate, "bar", secondaryEquity, 2, eqAttribute, spreadChartData, bidAskSpread, "AbsSpread");
     addJsonFile(startDate, endDate, "line", secondaryEquity, 1, eqAttribute, spreadChartData, bidAskPercent, "RelSpread");
 
     $("#mainChart").after("<div id=\'" + spreadChartName + "\' class=\'with-3d-shadow with-transitions nvChart optionSeries\'><svg></svg></div>");
-
     addGraph(spreadChartData, spreadChartName, "RelSpread", "AbsSpread");   //adding to mainchart
 }
 

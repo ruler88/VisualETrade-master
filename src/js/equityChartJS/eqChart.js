@@ -54,35 +54,46 @@ var addJsonFile = function(startDate, endDate, type, key, yAxis, attribute, data
   data.push(equityMap);
 }
 
+var showOptionDeltaHelper = function(underlierVals, optionVals, i, deltaArr) {
+  var delta = (optionVals[i].y - optionVals[i-1].y) / (underlierVals[i].y - underlierVals[i-1].y);
+  var graphPoint = {};
+  graphPoint.x = underlierVals[i].x;
+  graphPoint.y = delta;
+  deltaArr.push(graphPoint);
+}
+var createEqMap = function(arrVal, type, yAxis, key) {
+  var equityMap = {};
+  equityMap["values"] = arrVal; equityMap["type"] = type;
+  equityMap["yAxis"] = yAxis; equityMap["key"] = key;
+  return equityMap;
+}
 var showOptionDelta = function(chartData, optionChartData, yAxis, type) {
   var underlierVals = chartData[0]["values"];
-  var optionVals = chartData[1]["values"];
-  var deltaArr = [];
-  var equityMap = {};
+  var optionValsA = chartData[1]["values"];
+  var optionValsB = chartData[2]["values"];
+  var deltaArrA = [];
+  var deltaArrB = [];
+  var equityMapA = {};
+  var equityMapB = {};
 
-  if(!underlierVals || !optionVals || 
-    underlierVals.length<2 || optionVals.length <2 || 
-    underlierVals.length != optionVals.length) {
+  if(!underlierVals || !optionValsA || !optionValsB ||
+    underlierVals.length<2 || optionValsA.length <2 || optionValsB.length <2 ||
+    underlierVals.length != optionValsA.length || underlierVals.length != optionValsB.length) {
     alert("SOMETHING FUCKED UP");
     return;
   }
   for( var i=1; i<underlierVals.length; i++ ) {
-    if(underlierVals[i].x.getTime() != optionVals[i].x.getTime()) {
+    if(underlierVals[i].x.getTime() != optionValsA[i].x.getTime()) {
       // alert("time mismatch");
       // return;
     }
-    if( Math.abs(underlierVals[i].y - underlierVals[i-1].y) < 0.01 ) { continue; }
-    var delta = (optionVals[i].y - optionVals[i-1].y) / (underlierVals[i].y - underlierVals[i-1].y);
-    var graphPoint = {};
-    graphPoint.x = underlierVals[i].x;
-    graphPoint.y = delta;
-    deltaArr.push(graphPoint);
+    if( Math.abs(underlierVals[i].y - underlierVals[i-1].y) > 0.01 ) {
+      showOptionDeltaHelper(underlierVals, optionValsA, i, deltaArrA);
+      showOptionDeltaHelper(underlierVals, optionValsB, i, deltaArrB);
+    }
   }
-  equityMap["values"] = deltaArr;
-  equityMap["type"] = type;
-  equityMap["yAxis"] = yAxis;
-  equityMap["key"] = "OptionDelta";
-  optionChartData.push(equityMap);
+  optionChartData.push(createEqMap(deltaArrA, type, yAxis, "Option Delta A"));
+  optionChartData.push(createEqMap(deltaArrB, type, yAxis, "Option Delta B"));
 }
 
 
