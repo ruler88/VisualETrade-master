@@ -7,12 +7,11 @@ var addJsonFile = function(startDate, endDate, bar, key, attribute, data) {
   var equityMap = {};
   equityMap["key"] = attribute + ":" + key;
   equityMap["bar"] = bar;
-  //equityMap["values"] -> get it from the json
 
+var resultArr = [];
   while( startDate <= endDate ) {
     var filename = convertDateToFile(startDate, key);
-    var resultArr = [];
-
+    
     $.ajax({
       url: filename,
       dataType: 'json',
@@ -32,11 +31,10 @@ var addJsonFile = function(startDate, endDate, bar, key, attribute, data) {
         //file does not exist
       }
     });
-
-    equityMap["values"] = resultArr;
     startDate = d3.time.day.offset(startDate, 1);
   }
-  
+  //console.log(resultArr);
+  equityMap["values"] = resultArr;
   data.push(equityMap);
 };
 
@@ -67,7 +65,7 @@ nv.addGraph(function() {
     chart.xAxis.tickFormat(function(d) {
       var dx = chartData[0].values[d] && chartData[0].values[d].x || 0;
       if (dx > 0) {
-          return d3.time.format('%x')(new Date(dx))
+          return d3.time.format('%m/%d-%I:%M:%S')(new Date(dx))
       }
       return null;
     });

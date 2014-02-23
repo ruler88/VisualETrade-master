@@ -147,6 +147,7 @@ var showChart = function() {
     addJsonFile(startDate, endDate, true, secondaryEquity, eqAttribute, chartData);
 
     addGraph(chartData);
+    delete chartData;
 }
 
 var equityButtonClick = function(equityName) {
@@ -164,13 +165,11 @@ var equityButtonClick = function(equityName) {
 }
 
 var dummyDataButton = function() {  //remove later
-    setDates("20140221", true);
+    setDates("20140214", true);
     setDates("20140221", false);
     setAttribute("ask");
 
-    var chartData = [];
-    addJsonFile(startDate, endDate, true, "GOOG:2014:2:22:CALL:1202.50", "ask", chartData);
-    addJsonFile(startDate, endDate, false, "GOOG", "ask", chartData);
+    //var chartData = [];
 
-    addGraph(chartData);
+    //addGraph(chartData);
 }
