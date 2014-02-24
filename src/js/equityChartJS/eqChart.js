@@ -92,8 +92,8 @@ var showOptionDelta = function(chartData, optionChartData, yAxis, type) {
       showOptionDeltaHelper(underlierVals, optionValsB, i, deltaArrB);
     }
   }
-  optionChartData.push(createEqMap(deltaArrA, type, yAxis, "Option Delta A"));
-  optionChartData.push(createEqMap(deltaArrB, type, yAxis, "Option Delta B"));
+  optionChartData.push(createEqMap(deltaArrA, type, yAxis, chartData[1]["key"]));
+  optionChartData.push(createEqMap(deltaArrB, type, yAxis, chartData[0]["key"]));
 }
 
 
