@@ -193,11 +193,13 @@ var equityButtonClick = function(equityName) {
     } else {
         secondaryEquity = equityName;
         $("#secondaryEquity").text(secondaryEquity);
+        
+        if(primaryEquity && secondaryEquity) {
+            showChart();
+        }
     }
     manifestSwitcher = !manifestSwitcher;
-    if(primaryEquity && secondaryEquity) {
-        showChart();
-    }
+    
 }
 
 var dummyDataButton = function() {  //remove later

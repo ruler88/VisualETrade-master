@@ -80,6 +80,9 @@ var showOptionDelta = function(chartData, optionChartData, yAxis, type) {
     underlierVals.length<2 || optionValsA.length <2 || optionValsB.length <2 ||
     underlierVals.length != optionValsA.length || underlierVals.length != optionValsB.length) {
     alert("SOMETHING FUCKED UP");
+    console.log("underlier: " + underlierVals.length + " " + underlierVals);
+    console.log("Option A: " + optionValsA.length + " " + optionValsA);
+    console.log("Option B: " + optionValsB.length + " " + optionValsB);
     return;
   }
   for( var i=1; i<underlierVals.length; i++ ) {
