@@ -148,25 +148,35 @@ var showOptionCharts = function(chartData) {
     var deltaChartData = [];
     var optionVolName = "optionVolumeChart";
     var optionVolData = [];
+    var askBidVolName = "optionAskBidVolChart";
+    var askBidVolData = [];
     
     //add option delta
+    $("#mainChart").after("<div id=\'" + deltaChartName + "\' class=\'with-3d-shadow with-transitions nvChart optionSeries\'><svg></svg></div>");
     addJsonFile(startDate, endDate, "bar", swapOptionType(secondaryEquity), 2, eqAttribute, chartData);
     showOptionDelta(chartData, deltaChartData, 1, "line");
-    $("#mainChart").after("<div id=\'" + deltaChartName + "\' class=\'with-3d-shadow with-transitions nvChart optionSeries\'><svg></svg></div>");
     addGraph(deltaChartData, deltaChartName, "Delta", "Delta");   //adding to mainchart
     //add option spread
+    $("#mainChart").after("<div id=\'" + spreadChartName + "\' class=\'with-3d-shadow with-transitions nvChart optionSeries\'><svg></svg></div>");
     addJsonFile(startDate, endDate, "bar", secondaryEquity, 2, eqAttribute, spreadChartData, bidAskSpread, "AbsSpread");
     addJsonFile(startDate, endDate, "line", secondaryEquity, 1, eqAttribute, spreadChartData, bidAskPercent, "RelSpread");
-    $("#mainChart").after("<div id=\'" + spreadChartName + "\' class=\'with-3d-shadow with-transitions nvChart optionSeries\'><svg></svg></div>");
     addGraph(spreadChartData, spreadChartName, "RelSpread", "AbsSpread");   //adding to mainchart
-
     //add option volume
     $("#mainChart").after("<div id=\'" + optionVolName + "\' class=\'with-3d-shadow with-transitions nvChart optionSeries\'><svg></svg></div>");
     addJsonFile(startDate, endDate, "bar", secondaryEquity, 1, "numTrades", optionVolData);
     addJsonFile(startDate, endDate, "bar", swapOptionType(secondaryEquity), 1, "numTrades", optionVolData);
     addGraph(optionVolData, optionVolName, "Call", "Put");
+    //add ask bid volume
+    $("#mainChart").after("<div id=\'" + askBidVolName + "\' class=\'with-3d-shadow with-transitions nvChart optionSeries\'><svg></svg></div>");
+    addJsonFile(startDate, endDate, "line", primaryEquity, 2, "askSize", askBidVolData);
+    addJsonFile(startDate, endDate, "line", primaryEquity, 2, "bidSize", askBidVolData);
+    addJsonFile(startDate, endDate, "bar", secondaryEquity, 1, "askSize", askBidVolData);
+    addJsonFile(startDate, endDate, "bar", secondaryEquity, 1, "bidSize", askBidVolData);
+    addJsonFile(startDate, endDate, "bar", swapOptionType(secondaryEquity), 1, "askSize", askBidVolData);
+    addJsonFile(startDate, endDate, "bar", swapOptionType(secondaryEquity), 1, "bidSize", askBidVolData);
+    addGraph(askBidVolData, askBidVolName, "ask/bid vol");
 
-    delete spreadChartData; delete deltaChartData; delete optionVolData;
+    delete spreadChartData; delete deltaChartData; delete optionVolData; delete askBidVolData;
 }
 
 var showChart = function() {
@@ -193,7 +203,7 @@ var equityButtonClick = function(equityName) {
     } else {
         secondaryEquity = equityName;
         $("#secondaryEquity").text(secondaryEquity);
-        
+
         if(primaryEquity && secondaryEquity) {
             showChart();
         }

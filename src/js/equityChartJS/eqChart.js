@@ -31,6 +31,8 @@ var addJsonFile = function(startDate, endDate, type, key, yAxis, attribute, data
         var jsonTime = jsonData.time.map(function(d) { return new Date(d).addHours(3)});
 
         for(var i=0; i<jsonTime.length; i++) {
+          console.log(jsonTime[i]);
+          if(jsonTime[i].getHours() <= 9 && jsonTime[i].getMinutes() <30) { continue; } //skip data before market open
           var graphPoint = {};
           graphPoint.x = jsonTime[i];
 
