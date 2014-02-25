@@ -153,7 +153,7 @@ var showOptionCharts = function(chartData) {
     addJsonFile(startDate, endDate, "bar", swapOptionType(secondaryEquity), 2, eqAttribute, chartData);
     showOptionDelta(chartData, deltaChartData, 1, "line");
     $("#mainChart").after("<div id=\'" + deltaChartName + "\' class=\'with-3d-shadow with-transitions nvChart optionSeries\'><svg></svg></div>");
-    addGraph(deltaChartData, deltaChartName, "Call", "Put");   //adding to mainchart
+    addGraph(deltaChartData, deltaChartName, "Delta", "Delta");   //adding to mainchart
     //add option spread
     addJsonFile(startDate, endDate, "bar", secondaryEquity, 2, eqAttribute, spreadChartData, bidAskSpread, "AbsSpread");
     addJsonFile(startDate, endDate, "line", secondaryEquity, 1, eqAttribute, spreadChartData, bidAskPercent, "RelSpread");
@@ -162,8 +162,8 @@ var showOptionCharts = function(chartData) {
 
     //add option volume
     $("#mainChart").after("<div id=\'" + optionVolName + "\' class=\'with-3d-shadow with-transitions nvChart optionSeries\'><svg></svg></div>");
-    addJsonFile(startDate, endDate, "bar", secondaryEquity, 1, "numTrades", optionVolData, null, "Trade Volume");
-    addJsonFile(startDate, endDate, "bar", swapOptionType(secondaryEquity), 1, "numTrades", optionVolData, null, "Trade Volume");
+    addJsonFile(startDate, endDate, "bar", secondaryEquity, 1, "numTrades", optionVolData);
+    addJsonFile(startDate, endDate, "bar", swapOptionType(secondaryEquity), 1, "numTrades", optionVolData);
     addGraph(optionVolData, optionVolName, "Call", "Put");
 
     delete spreadChartData; delete deltaChartData; delete optionVolData;
@@ -201,7 +201,7 @@ var equityButtonClick = function(equityName) {
 }
 
 var dummyDataButton = function() {  //remove later
-    setDates("20140221", true);
-    setDates("20140221", false);
+    setDates("20140224", true);
+    setDates("20140224", false);
     setAttribute("ask");
 }
