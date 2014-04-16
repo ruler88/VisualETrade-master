@@ -213,7 +213,7 @@ var equityButtonClick = function(equityName) {
 }
 
 var dummyDataButton = function() {  //remove later
-    setDates("20140224", true);
-    setDates("20140224", false);
+    setDates("20140228", true);
+    setDates("20140228", false);
     setAttribute("ask");
 }
